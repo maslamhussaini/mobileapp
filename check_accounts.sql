@@ -1,0 +1,1 @@
+exec sp_DisplayLedger @GLCode = '2-4',@Date1 = '07/01/23',@Date2 = '06/30/25'
