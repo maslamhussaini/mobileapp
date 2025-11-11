@@ -6,40 +6,36 @@ workflows:
       flutter: stable
       xcode: latest
     scripts:
-      - name: Flutter packages get
+      # 1️⃣ Install Flutter dependencies
+      - name: Get Flutter packages
         script: flutter pub get
 
-      - name: Build iOS release (no signing)
-        script: |
-          flutter build ios --release --no-codesign
+      # 2️⃣ Build iOS app without code signing
+      - name: Build iOS (debug, no codesign)
+        script: flutter build ios --debug --no-codesign
 
+      # 3️⃣ Package the .app into an IPA
       - name: Create IPA manually
         script: |
-          echo "Searching for Runner.app..."
+          echo "Packaging Runner.app into IPA..."
           cd build/ios
-          APP_PATH=""
-          if [ -d "iphoneos/Runner.app" ]; then
-            APP_PATH="iphoneos/Runner.app"
-          elif [ -d "Release-iphoneos/Runner.app" ]; then
-            APP_PATH="Release-iphoneos/Runner.app"
-          else
-            echo "❌ Runner.app not found."
-            exit 1
-          fi
-
-          echo "✅ Found app at: $APP_PATH"
+          # Remove old Payload folder if exists
+          rm -rf Payload
           mkdir -p Payload
-          cp -R "$APP_PATH" Payload/
+          cp -R iphoneos/Runner.app Payload/
           zip -r -y Runner.ipa Payload
           mkdir -p ipa
           mv Runner.ipa ipa/
-          echo "🎉 IPA created successfully at: build/ios/ipa/Runner.ipa"
+          echo "✅ IPA created at build/ios/ipa/Runner.ipa"
 
+    # 4️⃣ Artifacts to download from Codemagic
     artifacts:
       - build/ios/ipa/Runner.ipa
-      - build/ios/**/Runner.app
+      - build/ios/iphoneos/Runner.app
 
+    # 5️⃣ Optional: send build notification via email
     publishing:
       email:
         recipients:
-          - maslamhussaini@gamil.com
+          - maslamhussaini@gmail.com
+        
