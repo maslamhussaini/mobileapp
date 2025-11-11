@@ -15,19 +15,31 @@ workflows:
 
       - name: Create IPA manually
         script: |
-          echo "Creating unsigned IPA..."
-          cd build/ios/iphoneos
+          echo "Searching for Runner.app..."
+          cd build/ios
+          APP_PATH=""
+          if [ -d "iphoneos/Runner.app" ]; then
+            APP_PATH="iphoneos/Runner.app"
+          elif [ -d "Release-iphoneos/Runner.app" ]; then
+            APP_PATH="Release-iphoneos/Runner.app"
+          else
+            echo "❌ Runner.app not found."
+            exit 1
+          fi
+
+          echo "✅ Found app at: $APP_PATH"
           mkdir -p Payload
-          mv Runner.app Payload/
+          cp -R "$APP_PATH" Payload/
           zip -r -y Runner.ipa Payload
-          mv Runner.ipa ../ipa/
-          echo "IPA created at: build/ios/ipa/Runner.ipa"
+          mkdir -p ipa
+          mv Runner.ipa ipa/
+          echo "🎉 IPA created successfully at: build/ios/ipa/Runner.ipa"
 
     artifacts:
       - build/ios/ipa/Runner.ipa
-      - build/ios/iphoneos/Payload/Runner.app
+      - build/ios/**/Runner.app
 
     publishing:
       email:
         recipients:
-          - your@email.com
+          - maslamhussaini@gamil.com
