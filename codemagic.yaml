@@ -1,21 +1,33 @@
 workflows:
-  flutter-ios:
-    name: Flutter iOS Build (Unsigned)
+  build-ios-unsigned:
+    name: Build Unsigned iOS IPA
     max_build_duration: 60
     environment:
       flutter: stable
       xcode: latest
-      vars:
-        APP_NAME: "Runner"
     scripts:
-      - name: Get Flutter packages
+      - name: Flutter packages get
         script: flutter pub get
-      - name: Build iOS release
-        script: flutter build ios --release --no-codesign
+
+      - name: Build iOS release (no signing)
+        script: |
+          flutter build ios --release --no-codesign
+
+      - name: Create IPA manually
+        script: |
+          echo "Creating unsigned IPA..."
+          cd build/ios/iphoneos
+          mkdir -p Payload
+          mv Runner.app Payload/
+          zip -r -y Runner.ipa Payload
+          mv Runner.ipa ../ipa/
+          echo "IPA created at: build/ios/ipa/Runner.ipa"
+
     artifacts:
-      - build/ios/iphoneos/*.app
-      - build/ios/ipa/*.ipa
+      - build/ios/ipa/Runner.ipa
+      - build/ios/iphoneos/Payload/Runner.app
+
     publishing:
       email:
         recipients:
-          - maslamhussasini@gmail.com
+          - your@email.com
