@@ -398,7 +398,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
         // Load data for store 2
         final result2 = await BackendService.executeRawQuery(
-          'SELECT Storename, address, totalstock FROM fn_displaystock_storewise(2)',
+          'SELECT Storename, address, totalstock FROM fn_displaystock_storewise(20)',
         );
 
         // Combine results
@@ -574,8 +574,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 _isLoading = true;
               });
 
-              // Best-effort: refresh the materialized view first, then fetch data
-              await BackendService.refreshMaterializedView();
+              // First run refreshMaterializedView, then refresh until all data is loaded
+              await BackendService.refreshMaterializedView(viewName: 'mv_generalledger');
               await _startPeriodicRefresh();
             },
           ),
