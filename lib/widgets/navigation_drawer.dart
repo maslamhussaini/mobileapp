@@ -232,7 +232,7 @@ class AppNavigationDrawer extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'Version 2.5 • Build $buildTime',
+                      'Version 2.6 • Build $buildTime',
                       style: TextStyle(
                         fontSize: 11,
                         color: Colors.grey.shade600,
