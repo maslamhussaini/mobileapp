@@ -172,7 +172,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
 
     // Try to refresh materialized view first (best-effort), then start data load
-    await BackendService.refreshMaterializedView();
+    await BackendService.refreshMaterializedView(viewName: 'mv_generalledger');
     _startPeriodicRefresh();
   }
 
@@ -597,7 +597,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           });
 
           // Best-effort: refresh the materialized view first
-          await BackendService.refreshMaterializedView();
+          await BackendService.refreshMaterializedView(viewName: 'mv_generalledger');
 
           await _loadDashboardData();
 
@@ -789,7 +789,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     });
 
                     // Best-effort refresh of materialized view first
-                    await BackendService.refreshMaterializedView();
+                    await BackendService.refreshMaterializedView(viewName: 'mv_generalledger');
                     _startPeriodicRefresh();
                   }
                 },
