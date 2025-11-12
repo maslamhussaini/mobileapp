@@ -705,6 +705,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     'Stock in Hand',
                                     _totalItemStocks,
                                     Colors.green,
+                                    totalStockSum: _totalStockSum,
                                   ),
                                   const SizedBox(height: 16),
                                   _buildPurchaseSummaryCard(),
